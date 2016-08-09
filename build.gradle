@@ -4,13 +4,11 @@ buildscript {
     }
 
     dependencies {
-        classpath 'se.transmode.gradle:gradle-docker:1.2'
         classpath 'com.github.rholder:gradle-one-jar:1.0.4'
     }
 }
 
 apply plugin: 'java'
-apply plugin: 'docker'
 apply plugin: 'gradle-one-jar'
 
 repositories {
@@ -20,18 +18,6 @@ repositories {
 task uberJar(type: OneJar, dependsOn: build) {
     mainClass = 'hello.marathon.Main'
     archiveName = 'hello-marathon-all.jar'
-}
-
-task buildDocker(type: Docker, dependsOn: uberJar) {
-  push = false
-  applicationName = jar.baseName
-  dockerfile = file('Dockerfile')
-  doFirst {
-    copy {
-      from uberJar
-      into stageDir
-    }
-  }
 }
 
 dependencies {
